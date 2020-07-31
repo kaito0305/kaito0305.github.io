@@ -37,6 +37,11 @@
         const directionalLight = new THREE.DirectionalLight(0xffffff);
         directionalLight.position.set(1, 1, 1);
         scene.add(directionalLight);
+        
+          // 環境光源を作成
+        // new THREE.AmbientLight(色, 光の強さ)
+        const light = new THREE.AmbientLight(0xffffff, 1.0);
+        scene.add(light);
 
         // マテリアルを作成
         const material = new THREE.MeshStandardMaterial({
