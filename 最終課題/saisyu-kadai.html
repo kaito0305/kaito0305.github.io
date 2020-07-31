@@ -48,9 +48,7 @@
 
         function createStarField() {
           // 形状データを作成
-          const material = new THREE.SpriteMaterial({
-          map: new THREE.TextureLoader().load('img/star.png')
-        });
+          const geometry = new THREE.Geometry();
           for (let i = 0; i < 1000; i++) {
             geometry.vertices.push(
               new THREE.Vector3(
