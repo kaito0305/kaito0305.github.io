@@ -32,7 +32,7 @@
         const texture = loader.load('img/earth.png');
         // マテリアルにテクスチャーを設定
         const material = new THREE.MeshStandardMaterial({
-          map: texture
+          map: new THREE.TextureLoader().load('img/earth.png'),
         });
         // メッシュを作成
         const earth = new THREE.Mesh(geometry, material);
