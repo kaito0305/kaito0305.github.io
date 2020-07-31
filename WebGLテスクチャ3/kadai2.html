@@ -55,6 +55,13 @@
  sphere.position.set( 2, 0, -10 );
  sphere.rotation.x = 0.2;
  scene.add( sphere );
+    
+  // 円錐を作成
+ var coneGeometry = new THREE.CylinderGeometry( 0, 1, 1, 32);
+ var coneMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+ var cone = new THREE.Mesh(coneGeometry, mat);
+ cone.position.set(-2,0,-5);
+ scene.add(cone);
 
 
  // 平行光源1
