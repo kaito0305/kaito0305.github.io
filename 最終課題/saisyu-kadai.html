@@ -32,20 +32,16 @@
 
         // マテリアルを作成
         const material = new THREE.MeshPhongMaterial({
-          map: new THREE.TextureLoader().load('imgs/earthmap1k.jpg'),
+          map: new THREE.TextureLoader().load('img/earth.png'),
           side: THREE.DoubleSide
         });
 
-        //球
-            const sphereGeometry = new THREE.SphereGeometry( 150, 32, 32 );
-            //半径、垂直方向の分割数、水平方向の分割数
-            const textureLoader = new THREE.TextureLoader();
-            const erathtexture = textureLoader.load("img/earth.png");
-            const sphereMaterial = new THREE. MeshPhongMaterial();
-            sphereMaterial.map = erathtexture;
-            const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-            scene.add( sphere );
-
+        // 球体の形状を作成します
+        const geometry = new THREE.SphereGeometry(300, 30, 30);
+        // 形状とマテリアルからメッシュを作成します
+        const earthMesh = new THREE.Mesh(geometry, material);
+        // シーンにメッシュを追加します
+        scene.add(earthMesh);
 
         // 星屑を作成します (カメラの動きをわかりやすくするため)
         createStarField();
