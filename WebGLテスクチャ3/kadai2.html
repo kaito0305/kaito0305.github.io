@@ -57,7 +57,7 @@
  scene.add( sphere );
     
   // 円錐を作成
- var coneGeometry = new THREE.CylinderGeometry( 0.5, 1, 32);
+ var coneGeometry = new THREE.ConeGeometry( 0.5, 1, 32);
  var coneMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
  var cone = new THREE.Mesh(coneGeometry, mat);
  cone.position.set(-2,0,-5);
