@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8">
+ <title>Demo</title>
+ <!-- three.jsを読み込む(ローカル) -->
+ <!-- <script src="./three.js"></script> -->
+ <!-- three.jsを読み込む(CDN) -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/99/three.min.js"></script>
+</head>
+<body>
+ <script>
+ var init = function() {
+// レンダラーを作成
+var renderer = new THREE.WebGLRenderer();
+// レンダラーのサイズを設定
+renderer.setSize(1600, 1200);
+// canvasをbodyに追加
+document.body.appendChild(renderer.domElement);
+// シーンを作成
+var scene = new THREE.Scene();
+// カメラを作成
+var camera = new THREE.PerspectiveCamera(45, 800 / 600, 1, 1000);
+
+// 箱を作成
+var geometry = new THREE.BoxGeometry(1, 1, 1);
+var material = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+var box = new THREE.Mesh(geometry, material);
+box.position.z = -5;
+scene.add(box);
+
+//球
+var sphereGeometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+var sphereMaterial = new THREE. MeshPhongMaterial( {color: 0x0000ff,wireframe: true} );
+var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+sphere.position.set( 1.5, 0, -5 );
+scene.add( sphere );
+
+//角すい〜円すい
+var coneGeometry = new THREE.ConeGeometry( 0.5, 1, 5 );
+var coneMaterial = new THREE. MeshPhongMaterial( {color: 0x0000ff} );
+var cone = new THREE.Mesh( coneGeometry, coneMaterial );
+cone.position.set( -1.5, 0, -5 );
+scene.add( cone );
+
+// 平行光源を生成
+var light = new THREE.DirectionalLight(0xffffff);
+light.position.set(1, 1, 1);
+scene.add(light);
+
+var light = new THREE.DirectionalLight(0xffffff);
+light.position.set(-1, -1, -1);
+scene.add(light);
+
+// 描画
+renderer.render(scene, camera);
+}
+window.addEventListener('DOMContentLoaded', init);
+
+
+ </script>
+</body>
+</html>
