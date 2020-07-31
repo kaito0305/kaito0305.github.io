@@ -2,7 +2,6 @@
   <head>
     <meta charset="utf-8" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <script src="OrbitControls.js"></script>
     <script>
       // ページの読み込みを待つ
       window.addEventListener('load', init);
@@ -23,14 +22,13 @@
         // シーンを作成
         const scene = new THREE.Scene();
 
+        // カメラを作成
+        const camera = new THREE.PerspectiveCamera(45, width / height);
+
         // 平行光源を作成
         const directionalLight = new THREE.DirectionalLight(0xffffff);
         directionalLight.position.set(1, 1, 1);
         scene.add(directionalLight);
-        
-        // 光源（環境光）
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-        scene.add(ambientLight);
 
         // マテリアルを作成
         const material = new THREE.MeshPhongMaterial({
@@ -38,20 +36,20 @@
           side: THREE.DoubleSide
         });
 
-        // 球体の形状を作成
-        const geometry = new THREE.SphereGeometry(150, 30, 30);
+        // 球体の形状を作成します
+        const geometry = new THREE.SphereGeometry(300, 30, 30);
         // 形状とマテリアルからメッシュを作成します
         const earthMesh = new THREE.Mesh(geometry, material);
         // シーンにメッシュを追加します
         scene.add(earthMesh);
 
-        // 星屑を作成
+        // 星屑を作成します (カメラの動きをわかりやすくするため)
         createStarField();
 
         function createStarField() {
           // 形状データを作成
           const geometry = new THREE.Geometry();
-          for (let i = 0; i < 3000; i++) {
+          for (let i = 0; i < 1000; i++) {
             geometry.vertices.push(
               new THREE.Vector3(
                 3000 * (Math.random() - 0.5),
