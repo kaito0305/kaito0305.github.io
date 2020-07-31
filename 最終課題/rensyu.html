@@ -1,86 +1,119 @@
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <script>
-      // ページの読み込みを待つ
-      window.addEventListener('load', init);
+(function() {
+    var scene;
+    var sphereEarth; // 追加
+    var sphereCrowd; // 追加
+    var sphereUniverse; // 追加
+    var camera;
+    var light;
+    var ambient;
+    var gridHelper;
+    var axisHelper;
+    var lightHelper;
+    var renderer;
+    var loader;
+    var width =  640;
+    var height = 525;
+    var controls;
 
-      function init() {
-        // サイズを指定
-        const width = 960;
-        const height = 540;
-        let rot = 0; // 角度
+    // ステージを作る
+    scene = new THREE.Scene();
 
-        // レンダラーを作成
-        const renderer = new THREE.WebGLRenderer({
-          canvas: document.querySelector('#myCanvas')
-        });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(width, height);
+    // 追加：地球テクスチャーを準備
+    loader = new THREE.TextureLoader();
+    loader.load('https://82mou.github.io/threejs/img/real-earth.jpg', function(texture) {
+      createEarth(texture);
+      render();
+    });
 
-        // シーンを作成
-        const scene = new THREE.Scene();
+    // 追加：雲テクスチャーを準備
+    loader.load('https://82mou.github.io/threejs/img/crowd.png', function(texture) {
+      createCrowd(texture);
+      render();
+    });
 
-        // カメラを作成
-        const camera = new THREE.PerspectiveCamera(45, width / height);
+    // 追加：宇宙テクスチャーを準備
+    loader.load('https://82mou.github.io/threejs/img/universe.jpg', function(texture) {
+      createUniverse(texture);
+      render();
+    });
 
-        // 星屑を作成します (カメラの動きをわかりやすくするため)
-        createStarField();
+    // 追加：地球を作る
+    function createEarth(texture) {
+      sphereEarth = new THREE.Mesh(
+        new THREE.SphereGeometry(80, 20, 20), // 形状
+        new THREE.MeshLambertMaterial({ // 材質
+         map: texture
+        })
+      );
+      sphereEarth.position.set(0, 0, 0);
+      scene.add(sphereEarth);
+    };
 
-        function createStarField() {
-          // 形状データを作成
-          const geometry = new THREE.Geometry();
-          // 配置する範囲
-          const SIZE = 3000;
-          // 配置する個数
-          const LENGTH = 1000;
-          for (let i = 0; i < LENGTH; i++) {
-            geometry.vertices.push(
-              new THREE.Vector3(
-                SIZE * (Math.random() - 0.5),
-                SIZE * (Math.random() - 0.5),
-                SIZE * (Math.random() - 0.5)
-              )
-            );
-          }
-          // マテリアルを作成
-          const material = new THREE.PointsMaterial({
-            map: new THREE.TextureLoader().load('img/star.png')
-            // 一つ一つのサイズ
-            size: ,
-            // 色
-            color: 0xffffff
-          });
+    // 追加：雲を作る
+    function createCrowd(texture) {
+      sphereCrowd = new THREE.Mesh(
+        new THREE.SphereGeometry(82, 20, 20), // 形状
+        new THREE.MeshLambertMaterial({ // 材質
+         map: texture,
+         transparent: true,
+         side: THREE.DoubleSide // 裏からも見えるようにする
+        })
+      );
+      sphereCrowd.position.set(0, 0, 0);
+      scene.add(sphereCrowd);
+    };
 
-          // 物体を作成
-          const mesh = new THREE.Points(geometry, material);
-          scene.add(mesh);
-        }
+    // 追加：宇宙を作る
+    function createUniverse(texture) {
+      sphereUniverse = new THREE.Mesh(
+        new THREE.SphereGeometry(10000, 20, 20), // 形状
+        new THREE.MeshLambertMaterial({ // 材質
+         map: texture,
+         side: THREE.DoubleSide // 裏からも見えるようにする
+        })
+      );
+      sphereUniverse.position.set(0, 0, 0);
+      scene.add(sphereUniverse);
+    };
 
-        tick();
+    // 追加：点光源を作る
+    light = new THREE.PointLight(0xffffff, 2.5, 0);
+    light.position.set(100, 130, 80);
+    scene.add(light);
 
-        // 毎フレーム時に実行されるループイベントです
-        function tick() {
-          rot += 1;
+    // 環境光を作る
+    ambient = new THREE.AmbientLight(0x222222);
+    scene.add(ambient);
 
-          // ラジアンに変換する
-          const radian = (rot * Math.PI) / 180;
-          // 角度に応じてカメラの位置を設定
-          camera.position.x = 1000 * Math.sin(radian);
-          camera.position.z = 1000 * Math.cos(radian);
-          // 原点方向を見つめる
-          camera.lookAt(new THREE.Vector3(0, 0, 0));
+    // カメラを作る
+    camera = new THREE.PerspectiveCamera(60, width / height, 1, 100000);
+    camera.position.set(200, 100, 300);
+    camera.lookAt(scene.position);
 
-          // レンダリング
-          renderer.render(scene, camera);
+    // helper
+    // gridHelper = new THREE.GridHelper(200, 20);
+    // scene.add(gridHelper);
+    // axisHelper = new THREE.AxisHelper(1000);
+    // scene.add(axisHelper);
+    // lightHelper = new THREE.PointLightHelper(light, 20);
+    // scene.add(lightHelper);
 
-          requestAnimationFrame(tick);
-        }
-      }
-    </script>
-  </head>
-  <body>
-    <canvas id="myCanvas"></canvas>
-  </body>
-</html>
+    // controls
+    controls = new THREE.OrbitControls(camera);
+
+    // renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setClearColor(0xefefef);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('stage').appendChild(renderer.domElement);
+
+    function render() {
+      requestAnimationFrame(render);
+
+      sphereEarth.rotation.y += 0.0005; // 追加：地球を回転させる
+      sphereCrowd.rotation.y += 0.0010; // 追加：雲を回転させる
+      controls.update();
+      renderer.render(scene, camera);
+    }
+})();
