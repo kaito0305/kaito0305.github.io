@@ -39,6 +39,11 @@
         // 3D空間にメッシュを追加
         earth.position.set( 2,0,-5);
         scene.add(mesh);
+        
+        // 環境光源を作成
+        // new THREE.AmbientLight(色, 光の強さ)
+        const light = new THREE.AmbientLight(0xFFFFFF, 1.0);
+        scene.add(light);
 
         // 平行光源
         const directionalLight = new THREE.DirectionalLight(0xffffff);
