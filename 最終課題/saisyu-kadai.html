@@ -35,8 +35,9 @@
           map: texture
         });
         // メッシュを作成
-        const mesh = new THREE.Mesh(geometry, material);
+        const earth = new THREE.Mesh(geometry, material);
         // 3D空間にメッシュを追加
+        earth.position.set( 3,0,-10);
         scene.add(mesh);
 
         // 平行光源
