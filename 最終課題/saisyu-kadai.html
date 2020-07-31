@@ -33,6 +33,10 @@
         const directionalLight = new THREE.DirectionalLight(0xffffff);
         directionalLight.position.set(1, 1, 1);
         scene.add(directionalLight);
+        
+        // 光源（環境光）
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+        scene.add(ambientLight);
 
         // マテリアルを作成
         const material = new THREE.MeshPhongMaterial({
