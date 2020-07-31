@@ -55,12 +55,12 @@
  sphere.position.set( 2, 0, -10 );
  sphere.rotation.x = 0.2;
  scene.add( sphere );
-    
+
   // 円錐を作成
  var coneGeometry = new THREE.ConeGeometry( 0.5, 1, 32);
  var coneMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
  var cone = new THREE.Mesh(coneGeometry, mat);
- cone.position.set(-2,0,-5);
+ cone.position.set(-2,0,-10);
  scene.add(cone);
 
 
@@ -82,11 +82,11 @@
     // 箱を回転させる
     box.rotation.x += 0.01;
     box.rotation.y += 0.01;
-    
+
     // 球を回転させる
     sphere.rotation.x += 0.01;
     sphere.rotation.y += 0.01;
-    
+
     // 円錐を回転させる
     cone.rotation.x += 0.01;
     cone.rotation.y += 0.01;
