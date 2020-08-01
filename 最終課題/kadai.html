@@ -69,6 +69,11 @@
           const mesh = new THREE.Points(geometry, material);
           scene.add(mesh);
         }
+        
+        // 環境光源を作成
+        // new THREE.AmbientLight(色, 光の強さ)
+        const light = new THREE.AmbientLight(0xFFFFFF, 1.0);
+        scene.add(light);
 
         tick();
 
