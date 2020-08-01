@@ -1,112 +1,114 @@
-<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>sun, earth, moon</title>
-<!-- three.jsを読み込む -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
-</head>
-<body>
-<script>
-var scene, camera, renderer;
-var moonRot;
-var earthRot;
-var CameraRot;
-// -----------------------------------------------
-// 実行部
-init();
-animate();
-// -----------------------------------------------
-// 関数群
-function init()
-{
-    // three.jsの設定
-    scene = new THREE.Scene();
-    // ライトの設定
-    var light = new THREE.PointLight(0xffffff,1,0,0);
-    light.position.set(0,0,0);
-    scene.add( light );
-    // カメラの設定
-    camera = new THREE.PerspectiveCamera( 20, window.innerWidth /window.innerHeight, 1, 1000000 );
-    cameraRot = 0;
-    camera.lookAt({x:0, y:0, z:0 });
-    // 太陽
-    geometrySun = new THREE.SphereGeometry( 500, 64, 64 );
-    materialSun = new THREE.MeshBasicMaterial( { color: 0xffffff, map: THREE.ImageUtils.loadTexture('preview_sun.jpg') } );
-    meshSun = new THREE.Mesh( geometrySun, materialSun );
-    scene.add( meshSun );
-    // 地球
-    geometryEarth = new THREE.SphereGeometry( 280, 64, 64 );
-    materialEarth = new THREE.MeshPhongMaterial( { color: 0xffffff, map: THREE.ImageUtils.loadTexture('earth.png') } );
-    meshEarth = new THREE.Mesh( geometryEarth, materialEarth );
-    scene.add( meshEarth );
-    earthRot = 0.0;
-    // 月
-    geometryMoon = new THREE.SphereGeometry( 60, 64, 64 );
-    materialMoon = new THREE.MeshPhongMaterial( { color: 0xffffff, map: THREE.ImageUtils.loadTexture('moonmap1k.jpg') } );
-    meshMoon = new THREE.Mesh( geometryMoon, materialMoon );
-    scene.add( meshMoon );
-    moonRot = 0.0;
-    // 星
-    geometryStar = new THREE.SphereGeometry( 20, 1, 1 );
-    for (i = 0; i < 0x1000; i++)
-    {
-        cl = (Math.random()*0x1000000) & 0xff00ff;
-        cl = ((Math.random()*0x20) * 0x000100) | cl;
-        materialStar = new THREE.MeshBasicMaterial( { color: cl } );
-        meshStar = new THREE.Mesh( geometryStar, materialStar );
-        x = Math.random();
-        z = Math.random();
-        y = Math.random();
-        if (Math.random() > 0.5)  { x *= -1; }
-        if (Math.random() > 0.5)  { z *= -1; }
-        if (Math.random() > 0.5)  { y *= -1; }
-        // ベクトルの正規化
-        l = Math.sqrt( x * x + y * y + z * z);
-        if (l!=0.0)
-        {
-            x = x/l;
-            y = y/l;
-            z = z/l;
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script src="VolumetricFire.js"></script>
+
+    <script>
+      // ページの読み込みを待つ
+      window.addEventListener('load', init);
+
+      function init() {
+        // サイズを指定
+        const width = 960;
+        const height = 540;
+
+        var clock = new THREE.Clock();
+        // レンダラーを作成
+        const renderer = new THREE.WebGLRenderer({
+          canvas: document.querySelector('#myCanvas')
+        });
+        renderer.setSize(width, height);
+        // 光源が関係ないので
+        renderer.setClearColor(0x333333, 1.0);
+
+        // シーンを作成
+        const scene = new THREE.Scene();
+        // シーン全体のフォグ
+        //scene.fog = new THREE.Fog(0x000000, 800, 2000);
+
+        // カメラを作成
+        const camera = new THREE.PerspectiveCamera(45, width / height);
+        // カメラの初期座標を設定
+        camera.position.set(0, 0, 1000);
+
+        // カメラコントローラーを作成
+        const controls = new THREE.OrbitControls(camera);
+        controls.autoRotate = true;
+
+        // helper
+        //const gridHelper = new THREE.GridHelper(1000,20); // size, step
+        //scene.add(gridHelper);
+        const axisHelper = new THREE.AxisHelper(1000); //軸の長さ　X：赤、Y：緑、z：青
+        scene.add(axisHelper);
+
+        // マテリアルを作成する
+        const material = new THREE.SpriteMaterial({
+          map: new THREE.TextureLoader().load('img/star.png')
+        });
+        // フォグ（霞）を有効にする
+       // material.fog = true;
+
+        // トーチの作成
+        var cylinderGeometry = new THREE.CylinderGeometry( 50, 30, 200, 8 );
+        //上の底面の半径、下の底面の半径、高さ、何角柱か
+        var cylinderMaterial = new THREE.MeshPhongMaterial( {color: 0xefa92a} );
+        var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+        cylinder.position.set( 0, -100, 0 );
+        scene.add( cylinder );
+
+        //　炎の作成
+
+        // set path to texture images
+        // either relative or absolute path
+        VolumetricFire.texturePath = './textures/';
+        var fireWidth  = 100;
+        var fireHeight = 400;
+        var fireDepth  = 100;
+        var sliceSpacing = 10;
+
+        var fire = new VolumetricFire(
+          fireWidth,
+          fireHeight,
+          fireDepth,
+          sliceSpacing,
+          camera
+        );
+        scene.add( fire.mesh );
+
+        // you can set position, rotation and scale
+        // fire.mesh accepts THREE.mesh features
+        fire.mesh.position.set( 0, fireHeight / 2, 0 );
+
+
+        // 光源（環境光）
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+        scene.add(ambientLight);
+
+        tick();
+
+        // 毎フレーム時に実行されるループイベントです
+        function tick() {
+          // レンダリング
+          requestAnimationFrame( tick );
+
+          var elapsed = clock.getElapsedTime();
+
+          //camera.position.set(
+          //  Math.sin( elapsed * 0.01 ) * 800,
+          //  Math.sin( elapsed * 0.05 ) * 1000,
+          //  Math.cos( elapsed * 0.01 ) * 800
+         // );
+         // camera.lookAt( scene.position );
+
+          fire.update( elapsed );
+          renderer.render(scene, camera);
         }
-        // ベクトルのスカラー倍
-        l = Math.random()*50000+20000;
-        x = x*l;
-        y = y*l;
-        z = z*l;
-        meshStar.position.x = x;
-        meshStar.position.y = y;
-        meshStar.position.z = z;
-        scene.add( meshStar );
-    }
-    // レンダラー
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.setClearColor( 0x101010, 1.0 );
-    document.body.appendChild( renderer.domElement );
-}
-function animate() {
-    // フレーム内処理
-    requestAnimationFrame( animate );
-    // 地球の位置
-    earthRot += 0.001;
-    meshEarth.position.x = Math.sin(earthRot)*3800;
-    meshEarth.position.z = Math.cos(earthRot)*3800;
-    meshEarth.rotation.x = -Math.PI*(1/8); 
-    meshEarth.rotation.y += 0.008; 
-    // 月の位置
-    moonRot += 0.01;
-    meshMoon.position.x = Math.sin(moonRot)*500 + meshEarth.position.x;
-    meshMoon.position.z = Math.cos(moonRot)*500 + meshEarth.position.z;
-    meshMoon.rotation.y += 0.001; 
-    // カメラの位置
-    camera.position.x = -1000;
-    camera.position.z = -5000;
-    camera.position.y = 0;
-    camera.lookAt({x:meshEarth.position.x , y:meshEarth.position.y , z:meshEarth.position.z });
-    // レンダリング
-    renderer.render( scene, camera );
-}
-</script>
-</body>
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
 </html>
