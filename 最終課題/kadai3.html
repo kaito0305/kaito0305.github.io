@@ -25,6 +25,9 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
 
+        //地球
+
+
         // 星屑を作成します (カメラの動きをわかりやすくするため)
         createStarField();
 
@@ -34,7 +37,7 @@
           // 配置する範囲
           const SIZE = 3000;
           // 配置する個数
-          const LENGTH = 1000;
+          const LENGTH = 3000;
           for (let i = 0; i < LENGTH; i++) {
             geometry.vertices.push(
               new THREE.Vector3(
@@ -47,7 +50,7 @@
           // マテリアルを作成
           const material = new THREE.PointsMaterial({
             // 一つ一つのサイズ
-            size: 10,
+            size: 5,
             // 色
             color: 0xffffff
           });
