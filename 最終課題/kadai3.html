@@ -35,46 +35,49 @@
         scene.add(ambientLight);
 
         // マテリアルを作成
+        //地球
         const earthmaterial = new THREE.MeshPhongMaterial({
           map: new THREE.TextureLoader().load('img/earth.png'),
           side: THREE.DoubleSide
         });
 
+        //月
         const moonmaterial = new THREE.MeshPhongMaterial({
           map: new THREE.TextureLoader().load('img/moon.jpg'),
           side: THREE.DoubleSide
         });
 
+        //太陽
         const sunmaterial = new THREE.MeshPhongMaterial({
           map: new THREE.TextureLoader().load('img/sun.jpg'),
           side: THREE.DoubleSide
         });
 
-        // 球体の形状を作成します
+        // 地球の形状を作成
         const earthgeometry = new THREE.SphereGeometry(100, 30, 30);
-        // 形状とマテリアルからメッシュを作成します
+        // 形状とマテリアルからメッシュを作成
         const earthMesh = new THREE.Mesh(earthgeometry, earthmaterial);
-        // シーンにメッシュを追加します
+        // シーンにメッシュを追加
         earthMesh.position.set( -700, 0, 0 );
         scene.add(earthMesh);
 
-        // 球体の形状を作成します
+        // 月の形状を作成
         const moongeometry = new THREE.SphereGeometry(20, 30, 30);
-        // 形状とマテリアルからメッシュを作成します
+        // 形状とマテリアルからメッシュを作成
         const moonMesh = new THREE.Mesh(moongeometry, moonmaterial);
-        // シーンにメッシュを追加します
+        // シーンにメッシュを追加
         moonMesh.position.set( -900, 100, 0 );
         scene.add(moonMesh);
 
-        // 球体の形状を作成します
+        // 太陽の形状を作成
         const sungeometry = new THREE.SphereGeometry(500, 30, 30);
-        // 形状とマテリアルからメッシュを作成します
+        // 形状とマテリアルからメッシュを作成
         const sunMesh = new THREE.Mesh(sungeometry, sunmaterial);
-        // シーンにメッシュを追加します
+        // シーンにメッシュを追加
         sunMesh.position.set( 300, 0, 0 );
         scene.add(sunMesh);
 
-        // 星屑を作成します (カメラの動きをわかりやすくするため)
+        // 星を作成
         createStarField();
 
         function createStarField() {
