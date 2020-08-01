@@ -2,47 +2,67 @@
   <head>
     <meta charset="utf-8" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-    </style>
     <script>
       // ページの読み込みを待つ
       window.addEventListener('load', init);
 
       function init() {
+        // サイズを指定
+        const width = 960;
+        const height = 540;
+        let rot = 0; // 角度
+
         // レンダラーを作成
         const renderer = new THREE.WebGLRenderer({
-          canvas: document.querySelector('#myCanvas'),
-          antialias: true
+          canvas: document.querySelector('#myCanvas')
         });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
 
         // シーンを作成
         const scene = new THREE.Scene();
 
         // カメラを作成
-        const camera = new THREE.PerspectiveCamera(45, 1.0);
-        camera.position.set(0, 0, +1000);
+        const camera = new THREE.PerspectiveCamera(45, width / height);
         
-        // 平行光源を作成
-        const directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.position.set(1, 1, 1);
-        scene.add(directionalLight);
+        // 星屑を作成します
+        createStarField();
 
-        // マテリアルを作成
-        const material = new THREE.MeshStandardMaterial({
-          map: new THREE.TextureLoader().load('imgs/earthmap1k.jpg'),
-          side: THREE.DoubleSide
-        });
+        function createStarField() {
+          // 形状データを作成
+          const geometry = new THREE.Geometry();
+          // 配置する範囲
+          const SIZE = 3000;
+          // 配置する個数
+          const LENGTH = 3000;
+          for (let i = 0; i < LENGTH; i++) {
+            geometry.vertices.push(
+              new THREE.Vector3(
+                SIZE * (Math.random() - 0.5),
+                SIZE * (Math.random() - 0.5),
+                SIZE * (Math.random() - 0.5)
+              )
+            );
+          }
+          // マテリアルを作成
+          const material = new THREE.PointsMaterial({
+            // 一つ一つのサイズ
+            size: 5,
+            // 色
+            color: 0xffffff
+          });
+
+          // 物体を作成
+          const mesh = new THREE.Points(geometry, material);
+          scene.add(mesh);
+        }
 
         tick();
 
         // 毎フレーム時に実行されるループイベントです
         function tick() {
-           rot += 0.5; // 毎フレーム角度を0.5度ずつ足していく
+          rot += 1;
+
           // ラジアンに変換する
           const radian = (rot * Math.PI) / 180;
           // 角度に応じてカメラの位置を設定
@@ -55,25 +75,6 @@
           renderer.render(scene, camera);
 
           requestAnimationFrame(tick);
-        }
-
-        // 初期化のために実行
-        onResize();
-        // リサイズイベント発生時に実行
-        window.addEventListener('resize', onResize);
-
-        function onResize() {
-          // サイズを取得
-          const width = window.innerWidth;
-          const height = window.innerHeight;
-
-          // レンダラーのサイズを調整する
-          renderer.setPixelRatio(window.devicePixelRatio);
-          renderer.setSize(width, height);
-
-          // カメラのアスペクト比を正す
-          camera.aspect = width / height;
-          camera.updateProjectionMatrix();
         }
       }
     </script>
