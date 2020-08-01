@@ -25,6 +25,19 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
         
+        // マテリアルを作成
+        const material = new THREE.MeshPhongMaterial({
+          map: new THREE.TextureLoader().load('img/earth.png'),
+          side: THREE.DoubleSide
+        });
+
+        // 球体の形状を作成します
+        const geometry = new THREE.SphereGeometry(150, 30, 30);
+        // 形状とマテリアルからメッシュを作成します
+        const earthMesh = new THREE.Mesh(geometry, material);
+        // シーンにメッシュを追加します
+        scene.add(earthMesh);
+        
         // 星屑を作成します
         createStarField();
 
