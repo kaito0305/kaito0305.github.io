@@ -36,6 +36,7 @@
         // 形状とマテリアルからメッシュを作成します
         const earthMesh = new THREE.Mesh(geometry, material);
         // シーンにメッシュを追加します
+        earthMesh.set( 1,0,-3);
         scene.add(earthMesh);
         
         // 星屑を作成します
