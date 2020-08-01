@@ -59,7 +59,7 @@
         scene.add(earthMesh);
 
         // 球体の形状を作成します
-        const moongeometry = new THREE.SphereGeometry(10, 30, 30);
+        const moongeometry = new THREE.SphereGeometry(20, 30, 30);
         // 形状とマテリアルからメッシュを作成します
         const moonMesh = new THREE.Mesh(moongeometry, moonmaterial);
         // シーンにメッシュを追加します
@@ -67,7 +67,7 @@
         scene.add(moonMesh);
 
         // 球体の形状を作成します
-        const sungeometry = new THREE.SphereGeometry(150, 30, 30);
+        const sungeometry = new THREE.SphereGeometry(100, 30, 30);
         // 形状とマテリアルからメッシュを作成します
         const sunMesh = new THREE.Mesh(sungeometry, sunmaterial);
         // シーンにメッシュを追加します
