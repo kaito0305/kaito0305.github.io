@@ -111,6 +111,7 @@
           camera.lookAt(new THREE.Vector3(-200, 0, 0));
           // 地球は常に回転させておく
           earthMesh.rotation.y += 0.01;
+          moonMesh.rotation.y += 0.01;
 
           // レンダリング
           renderer.render(scene, camera);
