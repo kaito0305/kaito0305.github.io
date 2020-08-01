@@ -25,7 +25,20 @@
         // カメラを作成
         const camera = new THREE.PerspectiveCamera(45, width / height);
 
+        // テクスチャー読み込み
+       var textureLoader = new THREE.TextureLoader();
+       var texture = textureLoader.load("earth.png");
+       var mat = new THREE.MeshPhongMaterial();
+       mat.map = texture;
+
         //地球
+       var sphereGeometry = new THREE.SphereGeometry( 0.7, 32, 32 );
+        //半径、垂直方向の分割数、水平方向の分割数
+        //var sphereMaterial = new THREE.MeshPhongMaterial( {color: 0xffffff);
+       var sphere = new THREE.Mesh( sphereGeometry, mat );
+       sphere.position.set( 2, 0, -10 );
+       sphere.rotation.x = 0.2;
+       scene.add( sphere );
 
 
         // 星屑を作成します (カメラの動きをわかりやすくするため)
