@@ -55,11 +55,11 @@
         // 形状とマテリアルからメッシュを作成します
         const earthMesh = new THREE.Mesh(earthgeometry, earthmaterial);
         // シーンにメッシュを追加します
-        earthMesh.position.set( -300, 0, 0 );
+        earthMesh.position.set( -500, 0, 0 );
         scene.add(earthMesh);
 
         // 球体の形状を作成します
-        const moongeometry = new THREE.SphereGeometry(30, 30, 30);
+        const moongeometry = new THREE.SphereGeometry(10, 30, 30);
         // 形状とマテリアルからメッシュを作成します
         const moonMesh = new THREE.Mesh(moongeometry, moonmaterial);
         // シーンにメッシュを追加します
@@ -71,7 +71,7 @@
         // 形状とマテリアルからメッシュを作成します
         const sunMesh = new THREE.Mesh(sungeometry, sunmaterial);
         // シーンにメッシュを追加します
-        sunMesh.position.set( 200, 0, 0 );
+        sunMesh.position.set( 300, 0, 0 );
         scene.add(sunMesh);
 
         // 星屑を作成します (カメラの動きをわかりやすくするため)
