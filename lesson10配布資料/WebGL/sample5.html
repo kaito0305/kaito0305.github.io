@@ -68,6 +68,7 @@
         const sphereMaterial = new THREE. MeshPhongMaterial();
         sphereMaterial.map = erathtexture;
         const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        sphere.position.set( 1, 0, -3);
         scene.add( sphere );
 
         //光源はspriteのみならば不要！
